@@ -14,6 +14,9 @@ namespace Unity.LEGO.Minifig
         const float distanceEpsilon = 0.1f;
         const float angleEpsilon = 0.1f;
 
+        public int pumpkinCount=0;
+        
+
         // Input type for controlling the minifig.
         enum InputType
         {
@@ -345,7 +348,7 @@ namespace Unity.LEGO.Minifig
                             }
 
                             // Calculate move delta.
-                            moveDelta = new Vector3(directSpeed.x, moveDelta.y, directSpeed.z);
+                            moveDelta = new Vector3(directSpeed.x*((float)Math.Pow(0.85,pumpkinCount)), moveDelta.y, directSpeed.z*((float)Math.Pow(0.85,pumpkinCount)));
                             break;
                         }
                 }
@@ -356,35 +359,7 @@ namespace Unity.LEGO.Minifig
                     jumpsInAir = maxJumpsInAir;
                 }
 
-                // Check if player is jumping.
-                if (Input.GetButtonDown("Jump"))
-                {
-                    if (!airborne || jumpsInAir > 0)
-                    {
-                        if (airborne)
-                        {
-                            jumpsInAir--;
-
-                            if (doubleJumpAudioClip)
-                            {
-                                audioSource.PlayOneShot(doubleJumpAudioClip);
-                            }
-                        }
-                        else
-                        {
-                            if (jumpAudioClip)
-                            {
-                                audioSource.PlayOneShot(jumpAudioClip);
-                            }
-                        }
-
-                        moveDelta.y = jumpSpeed;
-                        animator.SetTrigger(jumpHash);
-
-                        airborne = true;
-                        airborneTime = coyoteDelay;
-                    }
-                }
+                
 
                 // Cancel special.
                 cancelSpecial = !Mathf.Approximately(Input.GetAxis("Vertical"), 0) || !Mathf.Approximately(Input.GetAxis("Horizontal"), 0) || Input.GetButtonDown("Jump");

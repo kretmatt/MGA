@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.LEGO.Behaviours.Triggers;
+using Unity.LEGO.Minifig;
+
 
 namespace Unity.LEGO.Behaviours.Actions
 {
@@ -126,7 +128,7 @@ namespace Unity.LEGO.Behaviours.Actions
                     {
                         partRenderer.enabled = true;
                     }
-
+                    
                     // Start particles.
                     if (m_ParticleSystem)
                     {
@@ -153,6 +155,20 @@ namespace Unity.LEGO.Behaviours.Actions
                     // Check if picked up.
                     if (m_ActiveColliders.Count > 0)
                     {
+                        var minifigControllers = FindObjectsOfType<MinifigController>();
+                        
+                    	if (minifigControllers.Length>0)
+                    	{
+                            
+                            for(int i =0;i<minifigControllers.Length;i++){
+                               minifigControllers[i].pumpkinCount++;
+                            }
+                            //Re-enable player input to the Minifig
+ 
+                        	
+ 
+                    	}
+
                         // Particle burst.
                         if (m_ParticleSystem)
                         {
