@@ -4946,6 +4946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 652629fecff6a4c8fa0a985e628de942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pumpkinCount: 0
   maxForwardSpeed: 12
   maxBackwardSpeed: 6
   acceleration: 40
@@ -5135,7 +5136,7 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 6cf1df17-b917-463d-82d5-6fc6c9a2fe61
     m_ActionName: Player/Movement
-  m_NeverAutoSwitchControlSchemes: 0
+  m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: Keyboard
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
@@ -5152,7 +5153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d2f643818435ae41b7c1bc39c9c0f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 5
+  playerSpeed: 1
 --- !u!1 &8992135141750679125
 GameObject:
   m_ObjectHideFlags: 0

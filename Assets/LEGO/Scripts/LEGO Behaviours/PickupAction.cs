@@ -25,6 +25,7 @@ namespace Unity.LEGO.Behaviours.Actions
         const float k_HoverOffset = 2 * LEGOVerticalModule;
 
         protected HashSet<SensoryCollider> m_ActiveColliders = new HashSet<SensoryCollider>();
+        Collider m_LastActivatingCollider;
 
         [SerializeField, Tooltip("The effect used by the pickup.")]
         ParticleSystem m_Effect = null;
@@ -155,19 +156,15 @@ namespace Unity.LEGO.Behaviours.Actions
                     // Check if picked up.
                     if (m_ActiveColliders.Count > 0)
                     {
-                        var minifigControllers = FindObjectsOfType<MinifigController>();
-                        
-                    	if (minifigControllers.Length>0)
-                    	{
-                            
-                            for(int i =0;i<minifigControllers.Length;i++){
-                               minifigControllers[i].pumpkinCount++;
+                        if (m_LastActivatingCollider)
+                        {
+                            // If the player is a minifig or a brick, do an explosion.
+                            var minifigController = m_LastActivatingCollider.GetComponent<MinifigController>();
+                            if (minifigController)
+                            {
+                                minifigController.pumpkinCount++;
                             }
-                            //Re-enable player input to the Minifig
- 
-                        	
- 
-                    	}
+                        }
 
                         // Particle burst.
                         if (m_ParticleSystem)
@@ -217,8 +214,9 @@ namespace Unity.LEGO.Behaviours.Actions
             collider.Sense = SensoryTrigger.Sense.Player;
         }
 
-        void SensoryColliderActivated(SensoryCollider collider, Collider _)
+        void SensoryColliderActivated(SensoryCollider collider, Collider activatingCollider)
         {
+            m_LastActivatingCollider = activatingCollider;
             m_ActiveColliders.Add(collider);
         }
 
