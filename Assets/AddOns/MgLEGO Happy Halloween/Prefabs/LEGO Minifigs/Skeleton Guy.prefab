@@ -4723,7 +4723,6 @@ GameObject:
   - component: {fileID: -4523899178668484162}
   - component: {fileID: -8662778861515819560}
   - component: {fileID: -979740291187450446}
-  - component: {fileID: 2859016008861124996}
   m_Layer: 9
   m_Name: Skeleton Guy
   m_TagString: Player
@@ -4946,6 +4945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 652629fecff6a4c8fa0a985e628de942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSpeed: 5
   pumpkinCount: 0
   maxForwardSpeed: 12
   maxBackwardSpeed: 6
@@ -5122,8 +5122,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2859016008861124996}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+      - m_Target: {fileID: 8992135141747254580}
+        m_TargetAssemblyTypeName: Unity.LEGO.Minifig.MinifigController, Unity.LEGO.Minifig
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -5141,19 +5141,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &2859016008861124996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8992135141747254571}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d2f643818435ae41b7c1bc39c9c0f88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerSpeed: 1
 --- !u!1 &8992135141750679125
 GameObject:
   m_ObjectHideFlags: 0
