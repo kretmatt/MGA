@@ -11,11 +11,10 @@ namespace Unity.LEGO.Minifig
         private Vector3 playerVelocity;
         private bool groundedPlayer;
         [SerializeField]
-        private float playerSpeed = 12.0f;
+        public float playerSpeed = 12.0f;
 
-        public void OnMove(InputAction.CallbackContext context){
-            movementInput = context.ReadValue<Vector2>();
-            //SetState(State.Moving);
+        public void OnMove(Vector2 value){
+            movementInput = value;
         }
 
         private Vector2 movementInput = Vector2.zero;
@@ -803,6 +802,7 @@ namespace Unity.LEGO.Minifig
 
         protected virtual void OnControllerColliderHit(ControllerColliderHit hit)
         {
+
             if (controller.isGrounded)
             {
                 RaycastHit raycastHit;

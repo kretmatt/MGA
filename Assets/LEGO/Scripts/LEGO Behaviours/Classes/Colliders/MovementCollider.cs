@@ -14,6 +14,9 @@ namespace Unity.LEGO.Behaviours
 
         void OnTriggerEnter(Collider other)
         {
+
+            
+
             // Do not collide with triggers, projectiles or the player (if not a brick).
             if (!other.isTrigger &&
                 !other.gameObject.CompareTag("Projectile") &&
