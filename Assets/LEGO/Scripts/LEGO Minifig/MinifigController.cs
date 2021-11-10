@@ -7,7 +7,7 @@ namespace Unity.LEGO.Minifig
 {
     public class MinifigController : MonoBehaviour
     {
-        // New movement - player controller variables
+        // Movement variables
         private Vector3 playerVelocity;
         private bool groundedPlayer;
         [SerializeField]

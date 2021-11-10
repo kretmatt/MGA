@@ -7,6 +7,8 @@ using Unity.LEGO.Minifig;
 public class PlayerInputHandler : MonoBehaviour
 {
     public MinifigController player;
+    public GameObject playerPrefab;
+
     [SerializeField]
     List<GameObject> prefabs = new List<GameObject>();
 

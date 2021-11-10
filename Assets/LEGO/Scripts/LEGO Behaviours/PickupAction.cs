@@ -12,6 +12,8 @@ namespace Unity.LEGO.Behaviours.Actions
         public static Action<PickupAction> OnAdded;
         public static Action<PickupAction> OnCollected;
 
+        
+
         float m_InitialHoverOffset;
         Vector3 m_Offset;
         bool m_Initialised;
@@ -158,7 +160,7 @@ namespace Unity.LEGO.Behaviours.Actions
                     {
                         if (m_LastActivatingCollider)
                         {
-                            // If the player is a minifig or a brick, do an explosion.
+                            // If the player is a minifig increase pumpkin count.
                             var minifigController = m_LastActivatingCollider.GetComponent<MinifigController>();
                             if (minifigController)
                             {
@@ -188,8 +190,8 @@ namespace Unity.LEGO.Behaviours.Actions
 
                         // Delay destruction of LEGOBehaviours one frame to allow multiple Pickup Actions to be collected.
                         m_Collected = true;
-
                         OnCollected?.Invoke(this);
+                        OnDestroy();
                     }
                 }
                 else
@@ -252,6 +254,11 @@ namespace Unity.LEGO.Behaviours.Actions
                     m_ParticleSystem.Stop(false, ParticleSystemStopBehavior.StopEmitting);
                 }
             }
+            DestroyPickup();
+        }
+
+        public void DestroyPickup(){
+            Destroy(transform.root.gameObject);
         }
     }
 }

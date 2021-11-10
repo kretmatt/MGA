@@ -103,7 +103,8 @@ namespace Unity.LEGO.Behaviours
                     BreakMinifig();
                     var controller = GetComponent<MinifigController>();
                     controller.pumpkinCount=0;
-                
+                    //var respawner = GetComponent<RespawnScript>();
+                    //respawner.OnDeathRespawn(controller);
                     // Integrate respawn script. With a delay
                 }
                     
@@ -219,18 +220,18 @@ namespace Unity.LEGO.Behaviours
 
         void BreakMinifig()
         {
-            
-
             if (gameObject.CompareTag("Player"))
             {
-                m_MinifigController.Explode();
+                //Teleport player to respawn point and remove pumpkins
+                transform.position=new Vector3(30f, 0, 40.0f);
+                gameObject.GetComponent<MinifigController>().pumpkinCount=0;
+                //m_MinifigController.Explode();
                 //GameOverEvent evt = Events.GameOverEvent;
                 //evt.Win = false;
                 //EventManager.Broadcast(evt);
-                Destroy(this);
+                //Destroy(this);
+                //Destroy(transform.root.gameObject);
             }
-
-            
         }
 
         void OnControllerColliderHit(ControllerColliderHit hit)

@@ -2414,7 +2414,7 @@ MonoBehaviour:
   m_Brick: {fileID: 241552157006510815}
   m_BrickPivotOffset: {x: 4.656613e-10, y: 0.249935, z: -0.016274706}
   m_Audio: {fileID: 8300000, guid: 4328b7ace71144badaead3d6038f6802, type: 3}
-  m_AudioVolume: 1
+  m_AudioVolume: 0.3
   m_Effect: {fileID: 2787926235296682104, guid: 6505edee90d1f914a84be1260df1c640,
     type: 3}
 --- !u!114 &7397691267542154487

@@ -121,7 +121,6 @@ namespace Unity.LEGO.Behaviours.Actions
                 {
                     m_AudioSourcesToDestroy.Add(audioSource);
                 }
-
                 return audioSource;
             }
             else
