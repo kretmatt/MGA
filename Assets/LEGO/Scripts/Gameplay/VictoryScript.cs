@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.LEGO.Minifig;
+using UnityEngine.SceneManagement;
 
 public class VictoryScript : MonoBehaviour
 {
@@ -34,9 +35,11 @@ public class VictoryScript : MonoBehaviour
                 {
                     // Load player win scene
                     Debug.Log("PLAYER WIN");
+                    SceneManager.LoadScene("Results");
                 }else{
                     // Load hunter win scene
                     Debug.Log("HUNTER WINs");
+                    SceneManager.LoadScene("Results");
                 }
                 timerIsRunning=false;
             }
