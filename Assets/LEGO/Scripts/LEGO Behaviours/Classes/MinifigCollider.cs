@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.LEGO.Game;
 using Unity.LEGO.Minifig;
+using System.Collections;
 
 namespace Unity.LEGO.Behaviours
 {
@@ -64,7 +65,16 @@ namespace Unity.LEGO.Behaviours
                 && !belowHit.collider.CompareTag("Player") && !belowHit.collider.CompareTag("Projectile")
             )
             {
-                
+                                    
+                if(aboveHit.collider.CompareTag("Swamp") || belowHit.collider.CompareTag("Swamp")){
+                    Debug.Log("Entered Swamp!");
+                    var controller = GetComponent<MinifigController>();
+                    controller.slowedDown=true;
+                    StartCoroutine(ResetSlowDown(controller));
+                    //var respawner = GetComponent<RespawnScript>();
+                    //respawner.OnDeathRespawn(controller);
+                    // Integrate respawn script. With a delay
+                }
 
                 var currentAbovePosition = aboveHit.point;
                 var currentBelowPosition = belowHit.point;
@@ -107,8 +117,8 @@ namespace Unity.LEGO.Behaviours
                     //respawner.OnDeathRespawn(controller);
                     // Integrate respawn script. With a delay
                 }
-                    
 
+                
 
                 // Ignore players and projectiles.
                 if (!collider.CompareTag("Player") && !collider.CompareTag("Projectile"))
@@ -240,6 +250,13 @@ namespace Unity.LEGO.Behaviours
             {
                 BreakMinifig();
             }
+        }
+
+        IEnumerator ResetSlowDown(MinifigController controller){
+            
+            yield return new WaitForSeconds(5);
+
+            controller.slowedDown = false;
         }
     }
 }

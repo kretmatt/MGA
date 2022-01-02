@@ -1341,6 +1341,8 @@ GameObject:
   - component: {fileID: 1200830673891951025}
   - component: {fileID: 4341902072243637963}
   - component: {fileID: -6590694570764877535}
+  - component: {fileID: 9032279526772331804}
+  - component: {fileID: 2298937906123910684}
   m_Layer: 9
   m_Name: Astronaut
   m_TagString: Player
@@ -1376,6 +1378,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 652629fecff6a4c8fa0a985e628de942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  slowedDown: 0
   playerSpeed: 5
   pumpkinCount: 0
   maxForwardSpeed: 12
@@ -1712,6 +1715,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onlyActiveGameObject: 0
   hideChildren: 1
+--- !u!54 &9032279526772331804
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982527759115383178}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &2298937906123910684
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982527759115383178}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.6, y: 3.84, z: 0.8}
+  m_Center: {x: 0, y: 1.92, z: 0}
 --- !u!1 &1995924964877938779
 GameObject:
   m_ObjectHideFlags: 0

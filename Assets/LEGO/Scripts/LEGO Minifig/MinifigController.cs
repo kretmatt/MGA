@@ -10,6 +10,9 @@ namespace Unity.LEGO.Minifig
         // Movement variables
         private Vector3 playerVelocity;
         private bool groundedPlayer;
+
+        public bool slowedDown=false;
+
         [SerializeField]
         public float playerSpeed = 12.0f;
 
@@ -289,6 +292,11 @@ namespace Unity.LEGO.Minifig
                 targetSpeed.Normalize();
             }
             targetSpeed *= maxForwardSpeed;
+            if(slowedDown){
+                targetSpeed *= 0.5f;
+            }
+
+            
 
             var speedDiff = targetSpeed - directSpeed;
             if (speedDiff.sqrMagnitude < acceleration * acceleration * Time.deltaTime * Time.deltaTime)
@@ -335,6 +343,7 @@ namespace Unity.LEGO.Minifig
             }
 
             moveDelta = new Vector3(movementInput.x, 0, movementInput.y);
+
             HandleMotion();
             HandleAutomaticAnimation();
         }
@@ -589,7 +598,11 @@ namespace Unity.LEGO.Minifig
             {
                 //Sticky move is needed or else it looks like the minifig is stuck in a falling animation
                 var stickyMove = airborneTime < stickyTime ? Vector3.down * stickyForce * Time.deltaTime : Vector3.zero;
-                controller.Move(moveDelta * Time.deltaTime *15*((float)Math.Pow(0.85,pumpkinCount)));
+                if(slowedDown){
+                    controller.Move(moveDelta * Time.deltaTime *15*((float)Math.Pow(0.85,pumpkinCount)*((float)0.5)));
+                }else{
+                    controller.Move(moveDelta * Time.deltaTime *15*((float)Math.Pow(0.85,pumpkinCount)));
+                }
 
                 if (moveDelta != Vector3.zero)
                 {
