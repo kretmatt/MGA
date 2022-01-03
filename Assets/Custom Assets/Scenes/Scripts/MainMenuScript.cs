@@ -8,7 +8,7 @@ public class MainMenuScript : MonoBehaviour
 {
     // Switch to player configuration
     public void SwitchToPlayerConfiguration(){
-        SceneManager.LoadScene("Happy Halloween");
+        SceneManager.LoadScene("PlayerConfiguration");
     }
 
     // Close the game

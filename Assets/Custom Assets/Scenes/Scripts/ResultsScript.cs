@@ -7,7 +7,7 @@ public class ResultsScript : MonoBehaviour
 {
    // Switch to player configuration
     public void SwitchToPlayerConfiguration(){
-        SceneManager.LoadScene("Happy Halloween");
+        SceneManager.LoadScene("PlayerConfiguration");
     }
 
     // Switch to main menu

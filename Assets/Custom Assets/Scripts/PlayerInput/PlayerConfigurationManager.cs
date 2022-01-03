@@ -14,24 +14,27 @@ public class PlayerConfigurationManager : MonoBehaviour
     private GameObject hunterPrefab;
 
     public static PlayerConfigurationManager Instance { get; private set; }
+    
     private void Awake() {
         if(Instance == null){
             Instance = this;
             DontDestroyOnLoad(Instance);
             playerConfigurations = new List<PlayerConfiguration>();
         }
+        playerConfigurations.Clear();
     }
 
     public void SetPlayerPrefab(int index, GameObject playerPrefab){
-        if((index+1)==MaxPlayers && !playerConfigurations.Any(p=>p.PlayerPrefab.CompareTag("Hunter")))
-            playerConfigurations[index].PlayerPrefab = hunterPrefab;
-        else
-            playerConfigurations[index].PlayerPrefab = playerPrefab;
+        playerConfigurations[index].PlayerPrefab = playerPrefab;
     }
 
     public void ReadyPlayer(int index){
         playerConfigurations[index].Ready = true;
-        if(playerConfigurations.Count == MaxPlayers && playerConfigurations.All(p => p.Ready == true) && playerConfigurations.Any(p=>p.PlayerPrefab.CompareTag("Hunter"))){
+        if(playerConfigurations.Count == MaxPlayers && playerConfigurations.All(p => p.Ready == true)){
+            if(!playerConfigurations.Any(p=>p.PlayerPrefab.CompareTag("Hunter"))){
+                var randomHunterPlayer = Random.Range(0, playerConfigurations.Count());
+                playerConfigurations[randomHunterPlayer].PlayerPrefab = hunterPrefab; 
+            }
             SceneManager.LoadScene("Happy Halloween");
         }
     }
