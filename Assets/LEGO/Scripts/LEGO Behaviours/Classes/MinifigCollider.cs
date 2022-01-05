@@ -108,9 +108,10 @@ namespace Unity.LEGO.Behaviours
             var sideColliders = Physics.OverlapSphere(centerWS, m_Radius + 0.01f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
             foreach (var collider in sideColliders)
             {
-                // Die if hunter is touched
-                if(collider.CompareTag("Hunter")){
-                    BreakMinifig();
+                // Die if hunter is touched, reset pumpkinCount if Zombie or Hunter is touched
+                if(collider.CompareTag("Hunter") || collider.CompareTag("Zombie")){
+                    if(collider.CompareTag("Hunter"))
+                        BreakMinifig();
                     var controller = GetComponent<MinifigController>();
                     controller.pumpkinCount=0;
                     //var respawner = GetComponent<RespawnScript>();

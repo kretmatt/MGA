@@ -8,6 +8,7 @@ TagManager:
   - TutorialRequirement
   - Hunter
   - Swamp
+  - Zombie
   layers:
   - Default
   - TransparentFX
