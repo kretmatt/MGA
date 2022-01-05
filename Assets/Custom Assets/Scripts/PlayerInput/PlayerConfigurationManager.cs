@@ -31,10 +31,10 @@ public class PlayerConfigurationManager : MonoBehaviour
     public void ReadyPlayer(int index){
         playerConfigurations[index].Ready = true;
         if(playerConfigurations.Count == MaxPlayers && playerConfigurations.All(p => p.Ready == true)){
-            if(!playerConfigurations.Any(p=>p.PlayerPrefab.CompareTag("Hunter"))){
-                var randomHunterPlayer = Random.Range(0, playerConfigurations.Count());
-                playerConfigurations[randomHunterPlayer].PlayerPrefab = hunterPrefab; 
-            }
+            //if(!playerConfigurations.Any(p=>p.PlayerPrefab.CompareTag("Hunter"))){
+            //    var randomHunterPlayer = Random.Range(0, playerConfigurations.Count());
+            //    playerConfigurations[randomHunterPlayer].PlayerPrefab = hunterPrefab; 
+            //}
             SceneManager.LoadScene("Happy Halloween");
         }
     }
