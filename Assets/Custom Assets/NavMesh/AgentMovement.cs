@@ -22,12 +22,10 @@ public class AgentMovement : MonoBehaviour
     // Use Update method to set destination to player with highest pumpkin count
     void Update() {
         if(players.Length>0){
-            Debug.Log("WORKING");
             GameObject maxPlayer = players.Aggregate((p1,p2) => p1.GetComponent<MinifigController>().pumpkinCount > p2.GetComponent<MinifigController>().pumpkinCount ? p1 : p2);
             agent.SetDestination(maxPlayer.transform.position);
         }else{
             players = GameObject.FindGameObjectsWithTag("Player");
-            Debug.Log("SET  PLAYERS");
         }
     }
     // Reset pumpkin count of player on collision

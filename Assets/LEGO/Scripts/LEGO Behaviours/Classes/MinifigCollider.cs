@@ -65,16 +65,6 @@ namespace Unity.LEGO.Behaviours
                 && !belowHit.collider.CompareTag("Player") && !belowHit.collider.CompareTag("Projectile")
             )
             {
-                                    
-                if(aboveHit.collider.CompareTag("Swamp") || belowHit.collider.CompareTag("Swamp")){
-                    Debug.Log("Entered Swamp!");
-                    var controller = GetComponent<MinifigController>();
-                    controller.slowedDown=true;
-                    StartCoroutine(ResetSlowDown(controller));
-                    //var respawner = GetComponent<RespawnScript>();
-                    //respawner.OnDeathRespawn(controller);
-                    // Integrate respawn script. With a delay
-                }
 
                 var currentAbovePosition = aboveHit.point;
                 var currentBelowPosition = belowHit.point;

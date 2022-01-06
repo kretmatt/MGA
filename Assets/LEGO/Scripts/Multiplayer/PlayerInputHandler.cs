@@ -12,6 +12,8 @@ public class PlayerInputHandler : MonoBehaviour
     public void InitializePlayer(PlayerConfiguration pc){
         config = pc;
         player = GameObject.Instantiate(config.PlayerPrefab,transform.position, transform.rotation).GetComponent<MinifigController>();
+        if(player.GetComponent<PlayerNameTag>())
+            player.GetComponent<PlayerNameTag>().SetName("Adventurer");
     }
 
     public void Move(InputAction.CallbackContext context){

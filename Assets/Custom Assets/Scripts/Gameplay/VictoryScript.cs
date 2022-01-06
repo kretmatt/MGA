@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.LEGO.Minifig;
 using UnityEngine.SceneManagement;
 using Unity.LEGO.Game;
+using UnityEngine.UI;
+using TMPro;
 
 
 public class VictoryScript : MonoBehaviour
@@ -19,24 +21,43 @@ public class VictoryScript : MonoBehaviour
 
     GameObject[] players;
 
+    [SerializeField]
+    private TextMeshProUGUI scoreTitle;
+
     private void Start()
     {
         // Starts the timer automatically
         timerIsRunning = true;
         players = GameObject.FindGameObjectsWithTag("Player");
+        SetScore(0);
     }
 
     // Update is called once per frame
     void Update()
     {
         if(timerIsRunning){
+            
+            int currPumpkins=0;
+            
+            foreach(GameObject gobject in players){
+                currPumpkins+=gobject.GetComponent<MinifigController>().pumpkinCount;
+            }
+
             if(timeRemaining>0){
+                
                 timeRemaining-=Time.deltaTime;
-            }else{
-                int currPumpkins=0;
-                foreach(GameObject gobject in players){
-                    currPumpkins+=gobject.GetComponent<MinifigController>().pumpkinCount;
+
+                SetScore((overallPumpkinCount + currPumpkins));
+
+                if((overallPumpkinCount + currPumpkins)>=neededPumpkins)
+                {
+                    // Load player win scene
+                    SceneManager.LoadScene("Results");
+                    WinnerStorage.WinnerRole = "Collector team";
                 }
+
+            }else{
+                
                 if((overallPumpkinCount + currPumpkins)>=neededPumpkins)
                 {
                     // Load player win scene
@@ -59,5 +80,9 @@ public class VictoryScript : MonoBehaviour
             overallPumpkinCount += controller.pumpkinCount;
             controller.pumpkinCount = 0;
         }
+    }
+
+    void SetScore(int currentScore){
+        scoreTitle.SetText($"{currentScore} / {neededPumpkins} Pumpkins");
     }
 }
