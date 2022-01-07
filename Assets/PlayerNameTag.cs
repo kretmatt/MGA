@@ -10,11 +10,8 @@ public class PlayerNameTag : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI nameTitle;
 
-    void Start() {
-        nameTitle = GetComponentInChildren<TextMeshProUGUI>();    
-    }
-
     public void SetName(string newName){
         nameTitle.SetText(newName);
+        // Set Color
     }
 }

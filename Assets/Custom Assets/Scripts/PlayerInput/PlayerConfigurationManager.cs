@@ -9,9 +9,11 @@ public class PlayerConfigurationManager : MonoBehaviour
 {
     private List<PlayerConfiguration> playerConfigurations;
     [SerializeField]
-    private int MaxPlayers = 2;
+    private int MaxPlayers = 4;
     [SerializeField]
     private GameObject hunterPrefab;
+    [SerializeField]
+    private GameObject collectorPrefab;
 
     public static PlayerConfigurationManager Instance { get; private set; }
     
@@ -34,6 +36,10 @@ public class PlayerConfigurationManager : MonoBehaviour
             if(!playerConfigurations.Any(p=>p.PlayerPrefab.CompareTag("Hunter"))){
                 var randomHunterPlayer = Random.Range(0, playerConfigurations.Count());
                 playerConfigurations[randomHunterPlayer].PlayerPrefab = hunterPrefab; 
+            }
+            if(!playerConfigurations.Any(p=>p.PlayerPrefab.CompareTag("Player"))){
+                var randomCollectorPlayer = Random.Range(0, playerConfigurations.Count());
+                playerConfigurations[randomCollectorPlayer].PlayerPrefab = collectorPrefab; 
             }
             SceneManager.LoadScene("Happy Halloween");
         }

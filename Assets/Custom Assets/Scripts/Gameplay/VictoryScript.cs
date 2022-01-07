@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using Unity.LEGO.Game;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 
 public class VictoryScript : MonoBehaviour
@@ -15,7 +16,7 @@ public class VictoryScript : MonoBehaviour
     // Amount of pumkins for player win condition
     public int neededPumpkins=1;
     
-    public bool timerIsRunning=false;
+    private bool timerIsRunning=false;
 
     public int overallPumpkinCount = 0;
 
@@ -23,6 +24,12 @@ public class VictoryScript : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI scoreTitle;
+
+    [SerializeField]
+    private TextMeshProUGUI timeTitle;
+
+    [SerializeField]
+    private AudioSource pumpkinSaveSoundEffect;
 
     private void Start()
     {
@@ -42,11 +49,11 @@ public class VictoryScript : MonoBehaviour
             foreach(GameObject gobject in players){
                 currPumpkins+=gobject.GetComponent<MinifigController>().pumpkinCount;
             }
-
+            
             if(timeRemaining>0){
                 
                 timeRemaining-=Time.deltaTime;
-
+                SetTime();
                 SetScore((overallPumpkinCount + currPumpkins));
 
                 if((overallPumpkinCount + currPumpkins)>=neededPumpkins)
@@ -77,12 +84,27 @@ public class VictoryScript : MonoBehaviour
     void OnTriggerEnter(Collider other){
         if(other.CompareTag("Player")){
             var controller = other.GetComponent<MinifigController>();
-            overallPumpkinCount += controller.pumpkinCount;
+            int pumpkinHelper = controller.pumpkinCount;
             controller.pumpkinCount = 0;
+            StartCoroutine(SavePumpkinsSound(pumpkinHelper));
+            overallPumpkinCount+=pumpkinHelper;
+        }
+    }
+
+
+    IEnumerator SavePumpkinsSound(int amount){
+        for(int i = 0; i<amount; i++){
+            pumpkinSaveSoundEffect.Play();
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
     void SetScore(int currentScore){
         scoreTitle.SetText($"{currentScore} / {neededPumpkins} Pumpkins");
+    }
+
+    void SetTime(){
+        double remainingSeconds = Math.Round(timeRemaining);
+        timeTitle.SetText($"{remainingSeconds} s");
     }
 }

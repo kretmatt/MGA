@@ -383,10 +383,10 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: 0
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 1
   m_ChildScaleHeight: 1
   m_ReverseArrangement: 0
@@ -560,6 +560,12 @@ PrefabInstance:
       propertyPath: hunterPrefab
       value: 
       objectReference: {fileID: 8992135141747254571, guid: dda90291017304777b660e9e36767a94,
+        type: 3}
+    - target: {fileID: 1564615723880651479, guid: 47fd4c0944aba364b80dba1e4bd8ed27,
+        type: 3}
+      propertyPath: collectorPrefab
+      value: 
+      objectReference: {fileID: 5769543135938210561, guid: 422c298e5edde4efeb679ddef8883c33,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47fd4c0944aba364b80dba1e4bd8ed27, type: 3}

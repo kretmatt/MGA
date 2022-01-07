@@ -9,6 +9,7 @@ public class PumpkinSpawner : MonoBehaviour
     public Transform[] spawnLocations;
     public GameObject whatToSpawnPrefab;
     public List<GameObject> whatToSpawnClones;
+    public AudioSource soundEffect;
 
     int index=0;
 
@@ -20,17 +21,11 @@ public class PumpkinSpawner : MonoBehaviour
         whatToSpawnClones.RemoveAll(clone=>clone==null);
         if(whatToSpawnClones.Count<3){
             GameObject newPumpkin = (Instantiate(whatToSpawnPrefab, spawnLocations[index].transform.position, Quaternion.Euler(0,0,0)) as GameObject);
-
             whatToSpawnClones.Add(newPumpkin);
-
             index++;
+            soundEffect.Play();
             if(index>=spawnLocations.Length)
                 index=0;
         }
-    }
-
-    void PickUpPumpkin(GameObject gobject){
-        whatToSpawnClones.Remove(gobject);
-        Destroy(gobject);
     }
 }

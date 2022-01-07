@@ -258,7 +258,7 @@ namespace Unity.LEGO.Behaviours.Actions
         }
 
         public void DestroyPickup(){
-            Destroy(transform.root.gameObject);
+            Destroy(transform.root.gameObject,2);
         }
     }
 }

@@ -224,14 +224,9 @@ namespace Unity.LEGO.Behaviours
             if (gameObject.CompareTag("Player"))
             {
                 //Teleport player to respawn point and remove pumpkins
-                transform.position=new Vector3(30f, 0, 40.0f);
                 gameObject.GetComponent<MinifigController>().pumpkinCount=0;
-                //m_MinifigController.Explode();
-                //GameOverEvent evt = Events.GameOverEvent;
-                //evt.Win = false;
-                //EventManager.Broadcast(evt);
-                //Destroy(this);
-                //Destroy(transform.root.gameObject);
+                RespawnScript respawnScript = GetComponent<RespawnScript>();
+                respawnScript.Respawn(transform);
             }
         }
 
@@ -241,13 +236,6 @@ namespace Unity.LEGO.Behaviours
             {
                 BreakMinifig();
             }
-        }
-
-        IEnumerator ResetSlowDown(MinifigController controller){
-            
-            yield return new WaitForSeconds(5);
-
-            controller.slowedDown = false;
         }
     }
 }
