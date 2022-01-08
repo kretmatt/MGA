@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.LEGO.Game;
 using Unity.LEGO.Minifig;
+using System.Collections;
 
 namespace Unity.LEGO.Behaviours
 {
@@ -64,6 +65,7 @@ namespace Unity.LEGO.Behaviours
                 && !belowHit.collider.CompareTag("Player") && !belowHit.collider.CompareTag("Projectile")
             )
             {
+
                 var currentAbovePosition = aboveHit.point;
                 var currentBelowPosition = belowHit.point;
 
@@ -88,12 +90,24 @@ namespace Unity.LEGO.Behaviours
                 m_PreviousBelowPosition = null;
             }
 
+
+
             // Check sides.
             Dictionary<Collider, Vector3> currentSidePositions = new Dictionary<Collider, Vector3>();
 
             var sideColliders = Physics.OverlapSphere(centerWS, m_Radius + 0.01f, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore);
             foreach (var collider in sideColliders)
             {
+                // Die if hunter is touched, reset pumpkinCount if Zombie or Hunter is touched
+                if(collider.CompareTag("Hunter")){
+                    if(collider.CompareTag("Hunter"))
+                        BreakMinifig();
+                    var controller = GetComponent<MinifigController>();
+                    controller.pumpkinCount=0;
+                }
+
+                
+
                 // Ignore players and projectiles.
                 if (!collider.CompareTag("Player") && !collider.CompareTag("Projectile"))
                 {
@@ -204,26 +218,20 @@ namespace Unity.LEGO.Behaviours
 
         void BreakMinifig()
         {
-            m_MinifigController.Explode();
-
             if (gameObject.CompareTag("Player"))
             {
-                GameOverEvent evt = Events.GameOverEvent;
-                evt.Win = false;
-                EventManager.Broadcast(evt);
+                //Teleport player to respawn point and remove pumpkins
+                gameObject.GetComponent<MinifigController>().pumpkinCount=0;
+                RespawnScript respawnScript = GetComponent<RespawnScript>();
+                respawnScript.Respawn(transform);
             }
-
-            Destroy(this);
         }
 
         void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            if (hit.collider.CompareTag("Projectile"))
+            if (hit.collider.CompareTag("Hunter"))
             {
-                if (hit.collider.GetComponent<Projectile>().Deadly)
-                {
-                    BreakMinifig();
-                }
+                BreakMinifig();
             }
         }
     }

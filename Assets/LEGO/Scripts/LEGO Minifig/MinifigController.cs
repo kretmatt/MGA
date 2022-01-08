@@ -1,11 +1,26 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Unity.LEGO.Minifig
 {
     public class MinifigController : MonoBehaviour
     {
+        // Movement variables
+        private Vector3 playerVelocity;
+        private bool groundedPlayer;
+
+        public bool slowedDown=false;
+
+        [SerializeField]
+        public float playerSpeed = 12.0f;
+
+        public void OnMove(Vector2 value){
+            movementInput = value;
+        }
+
+        private Vector2 movementInput = Vector2.zero;
         // Constants.
         const float stickyTime = 0.05f;
         const float stickyForce = 9.6f;
@@ -13,6 +28,9 @@ namespace Unity.LEGO.Minifig
 
         const float distanceEpsilon = 0.1f;
         const float angleEpsilon = 0.1f;
+
+        public int pumpkinCount=0;
+        
 
         // Input type for controlling the minifig.
         enum InputType
@@ -249,153 +267,85 @@ namespace Unity.LEGO.Minifig
                 return;
             }
 
-            // Handle input.
-            if (inputEnabled)
-            {
-                switch (inputType)
-                {
-                    case InputType.Tank:
-                        {
-                            // Calculate speed.
-                            var targetSpeed = Input.GetAxisRaw("Vertical");
-                            targetSpeed *= targetSpeed > 0 ? maxForwardSpeed : maxBackwardSpeed;
-                            if (targetSpeed > speed)
-                            {
-                                speed = Mathf.Min(targetSpeed, speed + acceleration * Time.deltaTime);
-                            }
-                            else if (targetSpeed < speed)
-                            {
-                                speed = Mathf.Max(targetSpeed, speed - acceleration * Time.deltaTime);
-                            }
-
-                            // Calculate rotation speed.
-                            var targetRotateSpeed = Input.GetAxisRaw("Horizontal");
-                            targetRotateSpeed *= maxRotateSpeed;
-                            if (targetRotateSpeed > rotateSpeed)
-                            {
-                                rotateSpeed = Mathf.Min(targetRotateSpeed, rotateSpeed + rotateAcceleration * Time.deltaTime);
-                            }
-                            else if (targetRotateSpeed < rotateSpeed)
-                            {
-                                rotateSpeed = Mathf.Max(targetRotateSpeed, rotateSpeed - rotateAcceleration * Time.deltaTime);
-                            }
-
-                            // Calculate move delta.
-                            moveDelta = new Vector3(0, moveDelta.y, speed);
-                            moveDelta = transform.TransformDirection(moveDelta);
-                            break;
-                        }
-                    case InputType.Direct:
-                        {
+            // // Handle input.
+            // if (inputEnabled)
+            // {
+            //     
+            //         case InputType.Direct:
+            //             {
                             // Calculate direct speed and speed.
-                            var right = Vector3.right;
-                            var forward = Vector3.forward;
-                            if (Camera.main)
-                            {
-                                right = Camera.main.transform.right;
-                                right.y = 0.0f;
-                                right.Normalize();
-                                forward = Camera.main.transform.forward;
-                                forward.y = 0.0f;
-                                forward.Normalize();
-                            }
-
-                            var targetSpeed = right * Input.GetAxisRaw("Horizontal");
-                            targetSpeed += forward * Input.GetAxisRaw("Vertical");
-                            if (targetSpeed.sqrMagnitude > 0.0f)
-                            {
-                                targetSpeed.Normalize();
-                            }
-                            targetSpeed *= maxForwardSpeed;
-
-                            var speedDiff = targetSpeed - directSpeed;
-                            if (speedDiff.sqrMagnitude < acceleration * acceleration * Time.deltaTime * Time.deltaTime)
-                            {
-                                directSpeed = targetSpeed;
-                            }
-                            else if (speedDiff.sqrMagnitude > 0.0f)
-                            {
-                                speedDiff.Normalize();
-
-                                directSpeed += speedDiff * acceleration * Time.deltaTime;
-                            }
-                            speed = directSpeed.magnitude;
-
-                            // Calculate rotation speed - ignore rotate acceleration.
-                            rotateSpeed = 0.0f;
-                            if (targetSpeed.sqrMagnitude > 0.0f)
-                            {
-                                var localTargetSpeed = transform.InverseTransformDirection(targetSpeed);
-                                var angleDiff = Vector3.SignedAngle(Vector3.forward, localTargetSpeed.normalized, Vector3.up);
-
-                                if (angleDiff > 0.0f)
-                                {
-                                    rotateSpeed = maxRotateSpeed;
-                                }
-                                else if (angleDiff < 0.0f)
-                                {
-                                    rotateSpeed = -maxRotateSpeed;
-                                }
-
-                                // Assumes that x > NaN is false - otherwise we need to guard against Time.deltaTime being zero.
-                                if (Mathf.Abs(rotateSpeed) > Mathf.Abs(angleDiff) / Time.deltaTime)
-                                {
-                                    rotateSpeed = angleDiff / Time.deltaTime;
-                                }
-                            }
-
-                            // Calculate move delta.
-                            moveDelta = new Vector3(directSpeed.x, moveDelta.y, directSpeed.z);
-                            break;
-                        }
-                }
-
-                // Check if player is grounded.
-                if (!airborne)
-                {
-                    jumpsInAir = maxJumpsInAir;
-                }
-
-                // Check if player is jumping.
-                if (Input.GetButtonDown("Jump"))
-                {
-                    if (!airborne || jumpsInAir > 0)
-                    {
-                        if (airborne)
-                        {
-                            jumpsInAir--;
-
-                            if (doubleJumpAudioClip)
-                            {
-                                audioSource.PlayOneShot(doubleJumpAudioClip);
-                            }
-                        }
-                        else
-                        {
-                            if (jumpAudioClip)
-                            {
-                                audioSource.PlayOneShot(jumpAudioClip);
-                            }
-                        }
-
-                        moveDelta.y = jumpSpeed;
-                        animator.SetTrigger(jumpHash);
-
-                        airborne = true;
-                        airborneTime = coyoteDelay;
-                    }
-                }
-
-                // Cancel special.
-                cancelSpecial = !Mathf.Approximately(Input.GetAxis("Vertical"), 0) || !Mathf.Approximately(Input.GetAxis("Horizontal"), 0) || Input.GetButtonDown("Jump");
-
-            }
-            else
+            var right = Vector3.right;
+            var forward = Vector3.forward;
+            if (Camera.main)
             {
-                HandleAutomaticAnimation();
+                right = Camera.main.transform.right;
+                right.y = 0.0f;
+                right.Normalize();
+                forward = Camera.main.transform.forward;
+                forward.y = 0.0f;
+                forward.Normalize();
             }
+            var targetSpeed = right * movementInput.x;
+            targetSpeed += forward * movementInput.y;
+            if (targetSpeed.sqrMagnitude > 0.0f)
+            {
+                targetSpeed.Normalize();
+            }
+            targetSpeed *= maxForwardSpeed;
+            if(slowedDown){
+                targetSpeed *= 0.5f;
+            }
+
+            
+
+            var speedDiff = targetSpeed - directSpeed;
+            if (speedDiff.sqrMagnitude < acceleration * acceleration * Time.deltaTime * Time.deltaTime)
+            {
+                directSpeed = targetSpeed;
+            }
+            else if (speedDiff.sqrMagnitude > 0.0f)
+            {
+                speedDiff.Normalize();
+
+                directSpeed += speedDiff * acceleration * Time.deltaTime;
+            }
+            speed = directSpeed.magnitude;
+
+            // Calculate rotation speed - ignore rotate acceleration.
+            rotateSpeed = 0.0f;
+            if (targetSpeed.sqrMagnitude > 0.0f)
+            {
+                var localTargetSpeed = transform.InverseTransformDirection(targetSpeed);
+                var angleDiff = Vector3.SignedAngle(Vector3.forward, localTargetSpeed.normalized, Vector3.up);
+                if (angleDiff > 0.0f)
+                {
+                    rotateSpeed = maxRotateSpeed;
+                }
+                else if (angleDiff < 0.0f)
+                {
+                    rotateSpeed = -maxRotateSpeed;
+                }
+
+                // Assumes that x > NaN is false - otherwise we need to guard against Time.deltaTime being zero.
+                if (Mathf.Abs(rotateSpeed) > Mathf.Abs(angleDiff) / Time.deltaTime)
+                {
+                    rotateSpeed = angleDiff / Time.deltaTime;
+                }
+            }
+
+            // Cancel special.
+            cancelSpecial = !Mathf.Approximately(movementInput.y, 0) || !Mathf.Approximately(movementInput.x, 0);
+
+            groundedPlayer = controller.isGrounded;
+            if (groundedPlayer && playerVelocity.y < 0)
+            {
+                playerVelocity.y = 0f;
+            }
+
+            moveDelta = new Vector3(movementInput.x, 0, movementInput.y);
 
             HandleMotion();
+            HandleAutomaticAnimation();
         }
 
         void FindJointReferences(Transform parent)
@@ -646,8 +596,19 @@ namespace Unity.LEGO.Minifig
             // Move minifig - check if game object was made inactive in some callback to avoid warnings from CharacterController.Move.
             if (gameObject.activeInHierarchy)
             {
-                // Use a sticky move to make the minifig stay with moving platforms.
+                //Sticky move is needed or else it looks like the minifig is stuck in a falling animation
                 var stickyMove = airborneTime < stickyTime ? Vector3.down * stickyForce * Time.deltaTime : Vector3.zero;
+                if(slowedDown){
+                    controller.Move(moveDelta * Time.deltaTime *15*((float)Math.Pow(0.85,pumpkinCount)*((float)0.5)));
+                }else{
+                    controller.Move(moveDelta * Time.deltaTime *15*((float)Math.Pow(0.85,pumpkinCount)));
+                }
+
+                if (moveDelta != Vector3.zero)
+                {
+                    gameObject.transform.forward = moveDelta;
+                }
+                controller.Move(playerVelocity * Time.deltaTime);
                 controller.Move((moveDelta + externalMotion) * Time.deltaTime + stickyMove);
             }
 
@@ -854,6 +815,7 @@ namespace Unity.LEGO.Minifig
 
         protected virtual void OnControllerColliderHit(ControllerColliderHit hit)
         {
+
             if (controller.isGrounded)
             {
                 RaycastHit raycastHit;

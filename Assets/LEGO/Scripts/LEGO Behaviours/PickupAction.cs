@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.LEGO.Behaviours.Triggers;
+using Unity.LEGO.Minifig;
+
 
 namespace Unity.LEGO.Behaviours.Actions
 {
@@ -9,6 +11,8 @@ namespace Unity.LEGO.Behaviours.Actions
     {
         public static Action<PickupAction> OnAdded;
         public static Action<PickupAction> OnCollected;
+
+        
 
         float m_InitialHoverOffset;
         Vector3 m_Offset;
@@ -23,6 +27,7 @@ namespace Unity.LEGO.Behaviours.Actions
         const float k_HoverOffset = 2 * LEGOVerticalModule;
 
         protected HashSet<SensoryCollider> m_ActiveColliders = new HashSet<SensoryCollider>();
+        Collider m_LastActivatingCollider;
 
         [SerializeField, Tooltip("The effect used by the pickup.")]
         ParticleSystem m_Effect = null;
@@ -126,7 +131,7 @@ namespace Unity.LEGO.Behaviours.Actions
                     {
                         partRenderer.enabled = true;
                     }
-
+                    
                     // Start particles.
                     if (m_ParticleSystem)
                     {
@@ -153,6 +158,16 @@ namespace Unity.LEGO.Behaviours.Actions
                     // Check if picked up.
                     if (m_ActiveColliders.Count > 0)
                     {
+                        if (m_LastActivatingCollider)
+                        {
+                            // If the player is a minifig increase pumpkin count.
+                            var minifigController = m_LastActivatingCollider.GetComponent<MinifigController>();
+                            if (minifigController)
+                            {
+                                minifigController.pumpkinCount++;
+                            }
+                        }
+
                         // Particle burst.
                         if (m_ParticleSystem)
                         {
@@ -175,8 +190,8 @@ namespace Unity.LEGO.Behaviours.Actions
 
                         // Delay destruction of LEGOBehaviours one frame to allow multiple Pickup Actions to be collected.
                         m_Collected = true;
-
                         OnCollected?.Invoke(this);
+                        OnDestroy();
                     }
                 }
                 else
@@ -201,8 +216,9 @@ namespace Unity.LEGO.Behaviours.Actions
             collider.Sense = SensoryTrigger.Sense.Player;
         }
 
-        void SensoryColliderActivated(SensoryCollider collider, Collider _)
+        void SensoryColliderActivated(SensoryCollider collider, Collider activatingCollider)
         {
+            m_LastActivatingCollider = activatingCollider;
             m_ActiveColliders.Add(collider);
         }
 
@@ -238,6 +254,11 @@ namespace Unity.LEGO.Behaviours.Actions
                     m_ParticleSystem.Stop(false, ParticleSystemStopBehavior.StopEmitting);
                 }
             }
+            DestroyPickup();
+        }
+
+        public void DestroyPickup(){
+            Destroy(transform.root.gameObject,2);
         }
     }
 }

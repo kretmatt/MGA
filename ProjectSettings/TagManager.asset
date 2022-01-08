@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Projectile
   - TutorialRequirement
+  - Hunter
+  - Swamp
+  - Zombie
   layers:
   - Default
   - TransparentFX
