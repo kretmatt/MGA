@@ -273,7 +273,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: {fileID: 191218849}
   collectorJingle: {fileID: 995979332}
-  hunterJingle: {fileID: 0}
+  hunterJingle: {fileID: 197171401}
 --- !u!1 &197171399
 GameObject:
   m_ObjectHideFlags: 0

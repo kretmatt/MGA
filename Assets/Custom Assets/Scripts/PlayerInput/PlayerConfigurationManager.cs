@@ -22,7 +22,7 @@ public class PlayerConfigurationManager : MonoBehaviour
     private void Awake() {
         if(Instance == null){
             Instance = this;
-            //DontDestroyOnLoad(Instance);
+            DontDestroyOnLoad(Instance);
             playerConfigurations = new List<PlayerConfiguration>();
         }
         playerConfigurations.Clear();

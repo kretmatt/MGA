@@ -10,11 +10,13 @@ public class PumpkinSpawner : MonoBehaviour
     public GameObject whatToSpawnPrefab;
     public List<GameObject> whatToSpawnClones;
     public AudioSource soundEffect;
-    public float spawnFrequency = 10.0f;
+    public float spawnFrequency = 5.0f;
 
     int index=0;
 
     void Start(){
+        var players = GameObject.FindGameObjectsWithTag("Player");
+        spawnFrequency -=(players.Length)*1.2f;
         InvokeRepeating("SpawnPumpkin",5.0f,spawnFrequency);
     }
 

@@ -14,7 +14,7 @@ public class VictoryScript : MonoBehaviour
     //Game time
     public float timeRemaining = 10;
     // Amount of pumkins for player win condition
-    public int neededPumpkins=1;
+    public int neededPumpkins=20;
     
     private bool timerIsRunning=false;
 
@@ -37,6 +37,7 @@ public class VictoryScript : MonoBehaviour
         timerIsRunning = true;
         players = GameObject.FindGameObjectsWithTag("Player");
         SetScore(0);
+        neededPumpkins += (players.Length-1)*7;
     }
 
     // Update is called once per frame
