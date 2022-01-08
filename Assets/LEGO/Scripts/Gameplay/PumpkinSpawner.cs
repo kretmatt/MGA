@@ -10,22 +10,28 @@ public class PumpkinSpawner : MonoBehaviour
     public GameObject whatToSpawnPrefab;
     public List<GameObject> whatToSpawnClones;
     public AudioSource soundEffect;
+    public float spawnFrequency = 10.0f;
 
     int index=0;
 
     void Start(){
-        InvokeRepeating("SpawnPumpkin",5.0f,15.0f);
+        InvokeRepeating("SpawnPumpkin",5.0f,spawnFrequency);
     }
 
     void SpawnPumpkin(){
         whatToSpawnClones.RemoveAll(clone=>clone==null);
         if(whatToSpawnClones.Count<3){
-            GameObject newPumpkin = (Instantiate(whatToSpawnPrefab, spawnLocations[index].transform.position, Quaternion.Euler(0,0,0)) as GameObject);
-            whatToSpawnClones.Add(newPumpkin);
+            StartCoroutine(SpawnPumpkinAsync());
             index++;
-            soundEffect.Play();
             if(index>=spawnLocations.Length)
                 index=0;
         }
+    }
+
+    IEnumerator SpawnPumpkinAsync(){
+        GameObject newPumpkin = (Instantiate(whatToSpawnPrefab, spawnLocations[index].transform.position, Quaternion.Euler(0,0,0)) as GameObject);
+        whatToSpawnClones.Add(newPumpkin);
+        soundEffect.Play();
+        yield return new WaitForSeconds(1);
     }
 }

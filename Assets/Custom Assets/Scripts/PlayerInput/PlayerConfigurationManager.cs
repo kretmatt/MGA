@@ -14,13 +14,15 @@ public class PlayerConfigurationManager : MonoBehaviour
     private GameObject hunterPrefab;
     [SerializeField]
     private GameObject collectorPrefab;
+    [SerializeField]
+    private GameObject controlPrompt;
 
     public static PlayerConfigurationManager Instance { get; private set; }
     
     private void Awake() {
         if(Instance == null){
             Instance = this;
-            DontDestroyOnLoad(Instance);
+            //DontDestroyOnLoad(Instance);
             playerConfigurations = new List<PlayerConfiguration>();
         }
         playerConfigurations.Clear();
@@ -46,6 +48,7 @@ public class PlayerConfigurationManager : MonoBehaviour
     }
 
     public void HandlePlayerJoin(PlayerInput pi){
+        controlPrompt.SetActive(false);
         pi.transform.SetParent(transform);
         if(!playerConfigurations.Any(p=>p.PlayerIndex == pi.playerIndex)){
             playerConfigurations.Add(new PlayerConfiguration(pi));

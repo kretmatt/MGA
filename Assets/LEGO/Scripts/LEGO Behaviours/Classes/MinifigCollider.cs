@@ -99,14 +99,11 @@ namespace Unity.LEGO.Behaviours
             foreach (var collider in sideColliders)
             {
                 // Die if hunter is touched, reset pumpkinCount if Zombie or Hunter is touched
-                if(collider.CompareTag("Hunter") || collider.CompareTag("Zombie")){
+                if(collider.CompareTag("Hunter")){
                     if(collider.CompareTag("Hunter"))
                         BreakMinifig();
                     var controller = GetComponent<MinifigController>();
                     controller.pumpkinCount=0;
-                    //var respawner = GetComponent<RespawnScript>();
-                    //respawner.OnDeathRespawn(controller);
-                    // Integrate respawn script. With a delay
                 }
 
                 
