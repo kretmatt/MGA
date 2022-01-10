@@ -37,9 +37,18 @@ public class PlayerConfigurationManager : MonoBehaviour
                 var randomHunterPlayer = Random.Range(0, playerConfigurations.Count());
                 playerConfigurations[randomHunterPlayer].PlayerPrefab = hunterPrefab; 
             }
-            if(!playerConfigurations.Any(p=>p.PlayerPrefab.CompareTag("Player"))){
-                var randomCollectorPlayer = Random.Range(0, playerConfigurations.Count());
-                playerConfigurations[randomCollectorPlayer].PlayerPrefab = collectorPrefab; 
+            if(playerConfigurations.Count(p=>p.PlayerPrefab.CompareTag("Hunter"))>1){
+                Debug.Log("HERE to choose hunter");
+                // First person to choose hunter, gets to play the hunter character
+                bool hunterAssigned = false;
+
+                foreach(PlayerConfiguration pc in playerConfigurations){
+                    if(hunterAssigned==false && pc.PlayerPrefab.CompareTag("Hunter")){
+                        hunterAssigned = true;
+                    }else{
+                        pc.PlayerPrefab = collectorPrefab;
+                    }
+                }
             }
             SceneManager.LoadScene("Happy Halloween");
         }
